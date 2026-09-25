@@ -1,1486 +1,625 @@
-:root {
-  --ink: #0b0d10;
-  --ink-soft: #5c6570;
-  --chalk: #f3f1ec;
-  --paper: #ebe8e1;
-  --void: #0b0d10;
-  --void-soft: #151920;
-  --signal: #ff3b1f;
-  --signal-deep: #d92e16;
-  --mint: #3ecf9a;
-  --line: rgba(11, 13, 16, 0.1);
-  --line-strong: rgba(11, 13, 16, 0.18);
-  --line-light: rgba(243, 241, 236, 0.14);
-  --font-display: 'Syne', system-ui, sans-serif;
-  --font-serif: 'Instrument Serif', Georgia, serif;
-  --font-body: 'Karla', system-ui, sans-serif;
-  --shadow-soft: 0 30px 80px rgba(8, 10, 14, 0.18);
-  --radius: 22px;
-  color-scheme: light;
-}
-
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-}
-
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: var(--font-body);
-  background: var(--paper);
-  color: var(--ink);
-  -webkit-font-smoothing: antialiased;
-}
-
-#root {
-  min-height: 100vh;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-button {
-  font: inherit;
-  color: inherit;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.app {
-  position: relative;
-  overflow-x: clip;
-}
-
-.grain {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 80;
-  opacity: 0.055;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  mix-blend-mode: overlay;
-}
-
-.orb {
-  pointer-events: none;
-  position: fixed;
-  z-index: 0;
-  border-radius: 50%;
-  filter: blur(70px);
-  opacity: 0.35;
-}
-
-.orb-a {
-  width: 42vw;
-  height: 42vw;
-  top: -8%;
-  right: -10%;
-  background: radial-gradient(circle, rgba(255, 59, 31, 0.35), transparent 70%);
-  animation: drift 18s ease-in-out infinite;
-}
-
-.orb-b {
-  width: 36vw;
-  height: 36vw;
-  bottom: 10%;
-  left: -12%;
-  background: radial-gradient(circle, rgba(62, 207, 154, 0.22), transparent 70%);
-  animation: drift 22s ease-in-out infinite reverse;
-}
-
-@keyframes drift {
-  0%,
-  100% {
-    transform: translate(0, 0) scale(1);
-  }
-  50% {
-    transform: translate(3%, -4%) scale(1.08);
-  }
-}
-
-/* ——— Nav ——— */
-.nav {
-  position: fixed;
-  inset: 0 0 auto;
-  z-index: 50;
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.25rem;
-  backdrop-filter: blur(18px) saturate(1.2);
-  background: linear-gradient(
-    180deg,
-    rgba(11, 13, 16, 0.72) 0%,
-    rgba(11, 13, 16, 0.35) 70%,
-    transparent 100%
-  );
-  color: var(--chalk);
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.7rem;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: 0.78rem;
-  letter-spacing: 0.14em;
-}
-
-.brand-mark-mini {
-  display: grid;
-  place-items: center;
-  width: 2rem;
-  height: 2rem;
-  border-radius: 8px;
-  background: var(--signal);
-  color: #fff;
-  font-size: 0.7rem;
-  letter-spacing: 0.04em;
-}
-
-.brand-text {
-  display: none;
-}
-
-.nav-links {
-  display: none;
-  gap: 1.5rem;
-  font-size: 0.88rem;
-  font-weight: 500;
-  color: rgba(243, 241, 236, 0.72);
-}
-
-.nav-links a:hover,
-.nav-link-btn:hover {
-  color: #fff;
-}
-
-.nav-link-btn {
-  padding: 0;
-  font-size: inherit;
-  font-weight: inherit;
-  color: inherit;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.nav-cta {
-  justify-self: end;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.6rem 1rem;
-  border-radius: 999px;
-  background: var(--chalk);
-  color: var(--ink);
-  transition: transform 0.25s ease, background 0.25s ease;
-}
-
-.nav-cta:hover {
-  transform: translateY(-1px);
-  background: #fff;
-}
-
-/* ——— Hero ——— */
-.hero {
-  position: relative;
-  min-height: 100svh;
-  display: grid;
-  align-items: end;
-  isolation: isolate;
-  background:
-    radial-gradient(ellipse 80% 60% at 70% 35%, rgba(255, 59, 31, 0.18), transparent 55%),
-    radial-gradient(ellipse 50% 40% at 15% 80%, rgba(62, 207, 154, 0.12), transparent 50%),
-    linear-gradient(165deg, #12161d 0%, #0b0d10 55%, #151a22 100%);
-  color: var(--chalk);
-}
-
-.hero-mesh {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  opacity: 0.35;
-  background-image:
-    linear-gradient(rgba(243, 241, 236, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(243, 241, 236, 0.04) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: radial-gradient(ellipse at 60% 40%, #000 20%, transparent 75%);
-}
-
-.hero-stage {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  mask-image: linear-gradient(180deg, transparent 0%, #000 10%, #000 68%, transparent 100%);
-}
-
-.viewer-fallback {
-  display: grid;
-  place-items: center;
-  width: 100%;
-  height: 100%;
-  min-height: 12rem;
-  color: var(--ink-soft);
-  font-size: 0.95rem;
-}
-
-.hero-viewer,
-.viewer {
-  width: 100%;
-  height: 100%;
-}
-
-.hero-viewer canvas,
-.viewer canvas {
-  display: block;
-  width: 100% !important;
-  height: 100% !important;
-}
-
-.hero-copy {
-  position: relative;
-  z-index: 2;
-  max-width: 40rem;
-  padding: 7rem 1.25rem 5rem;
-}
-
-.brand-mark {
-  margin: 0 0 1rem;
-  font-family: var(--font-display);
-  font-size: clamp(2.6rem, 9vw, 5.8rem);
-  font-weight: 800;
-  line-height: 0.92;
-  letter-spacing: -0.045em;
-}
-
-.hero h1 {
-  margin: 0 0 0.95rem;
-  font-family: var(--font-serif);
-  font-size: clamp(1.55rem, 3.6vw, 2.4rem);
-  font-weight: 400;
-  font-style: italic;
-  line-height: 1.25;
-  color: rgba(243, 241, 236, 0.82);
-}
-
-.hero-support {
-  margin: 0 0 1.9rem;
-  max-width: 28rem;
-  font-size: 1.05rem;
-  line-height: 1.55;
-  color: rgba(243, 241, 236, 0.62);
-}
-
-.cta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  padding: 0.95rem 1.45rem;
-  font-size: 0.95rem;
-  font-weight: 700;
-  border-radius: 999px;
-  transition: transform 0.25s ease, background 0.25s ease, box-shadow 0.25s ease,
-    border-color 0.25s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-
-.btn-primary {
-  background: var(--signal);
-  color: #fff;
-  box-shadow: 0 16px 40px rgba(255, 59, 31, 0.35);
-}
-
-.btn-primary:hover {
-  background: var(--signal-deep);
-}
-
-.btn-ghost {
-  border: 1px solid rgba(243, 241, 236, 0.28);
-  background: rgba(243, 241, 236, 0.06);
-  backdrop-filter: blur(8px);
-  color: var(--chalk);
-}
-
-.btn-ghost:hover {
-  border-color: rgba(243, 241, 236, 0.55);
-  background: rgba(243, 241, 236, 0.12);
-}
-
-.hero-meta {
-  position: absolute;
-  z-index: 2;
-  right: 1.25rem;
-  bottom: 1.5rem;
-  display: none;
-  align-items: center;
-  gap: 0.7rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(243, 241, 236, 0.55);
-}
-
-.hero-meta .dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--mint);
-  box-shadow: 0 0 12px rgba(62, 207, 154, 0.7);
-}
-
-.scroll-cue {
-  position: absolute;
-  z-index: 2;
-  left: 1.25rem;
-  bottom: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: rgba(243, 241, 236, 0.5);
-}
-
-.scroll-cue span {
-  width: 1px;
-  height: 2.4rem;
-  background: linear-gradient(180deg, var(--signal), transparent);
-  animation: scroll-line 1.8s ease-in-out infinite;
-}
-
-@keyframes scroll-line {
-  0%,
-  100% {
-    transform: scaleY(0.55);
-    opacity: 0.4;
-  }
-  50% {
-    transform: scaleY(1);
-    opacity: 1;
-  }
-}
-
-/* ——— Roles marquee ——— */
-.roles {
-  overflow: hidden;
-  border-block: 1px solid rgba(243, 241, 236, 0.08);
-  background: var(--void);
-  color: var(--chalk);
-  padding: 1.05rem 0;
-}
-
-.roles-track {
-  display: flex;
-  width: max-content;
-  gap: 2.75rem;
-  animation: marquee 32s linear infinite;
-  font-family: var(--font-display);
-  font-size: 0.82rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-
-.roles-track span::after {
-  content: '◆';
-  margin-left: 2.75rem;
-  color: var(--signal);
-  font-size: 0.65em;
-}
-
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-/* ——— Work ——— */
-.work {
-  position: relative;
-  z-index: 1;
-  padding: 5rem 0 3.5rem;
-  background:
-    radial-gradient(ellipse at top right, rgba(255, 59, 31, 0.06), transparent 40%),
-    linear-gradient(180deg, var(--chalk) 0%, var(--paper) 100%);
-}
-
-.section-head {
-  display: grid;
-  gap: 1.1rem;
-  max-width: 72rem;
-  margin: 0 auto 2.25rem;
-  padding: 0 1.25rem;
-}
-
-.eyebrow {
-  margin: 0 0 0.5rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--signal);
-}
-
-.section-head h2,
-.viewer-toolbar h2,
-.about h2 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 4.2vw, 3.2rem);
-  font-weight: 700;
-  letter-spacing: -0.035em;
-  line-height: 1.02;
-}
-
-.section-head h2 em,
-.viewer-toolbar h2 em,
-.about h2 em {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  color: var(--ink-soft);
-}
-
-.section-lead {
-  margin: 0;
-  max-width: 26rem;
-  color: var(--ink-soft);
-  line-height: 1.6;
-  font-size: 1.02rem;
-}
-
-.work-rail {
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: minmax(270px, 80vw);
-  gap: 1.1rem;
-  overflow-x: auto;
-  padding: 0.5rem 1.25rem 1.75rem;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: thin;
-}
-
-.work-tile {
-  scroll-snap-align: start;
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-height: 390px;
-  padding: 0;
-  overflow: hidden;
-  text-align: left;
-  border: 1px solid transparent;
-  border-radius: var(--radius);
-  background: #fff;
-  box-shadow: var(--shadow-soft);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-}
-
-.work-tile-main {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  width: 100%;
-  padding: 0;
-  text-align: left;
-  background: none;
-  border: none;
-  color: inherit;
-  cursor: pointer;
-}
-
-.tile-admin-actions {
-  position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  z-index: 3;
-  display: flex;
-  gap: 0.4rem;
-}
-
-.tile-delete,
-.tile-edit {
-  position: static;
-  padding: 0.45rem 0.75rem;
-  border-radius: 999px;
-  border: none;
-  background: rgba(11, 13, 16, 0.82);
-  color: #fff;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-}
-
-.tile-edit:hover {
-  background: #2f6f9f;
-  transform: translateY(-1px);
-}
-
-.tile-delete:hover:not(:disabled) {
-  background: var(--signal);
-  transform: translateY(-1px);
-}
-
-.tile-delete:disabled {
-  opacity: 0.7;
-  cursor: wait;
-}
-
-.viewer-admin-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  margin-top: 1rem;
-}
-
-.viewer-delete {
-  margin-top: 0;
-}
-
-.work-tile.is-active {
-  border-color: color-mix(in srgb, var(--tile) 50%, var(--ink));
-  box-shadow: 0 32px 60px color-mix(in srgb, var(--tile) 25%, transparent);
-}
-
-.tile-visual {
-  position: relative;
-  height: 230px;
-  overflow: hidden;
-  background:
-    radial-gradient(circle at 70% 30%, var(--tile-soft), transparent 55%),
-    linear-gradient(145deg, #f8fafc, var(--tile-soft));
-}
-
-.tile-thumb {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-.work-tile:hover .tile-thumb {
-  transform: scale(1.06);
-}
-
-.tile-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, transparent 55%, rgba(11, 13, 16, 0.35));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.work-tile:hover .tile-overlay {
-  opacity: 1;
-}
-
-.tile-glow {
-  position: absolute;
-  inset: auto -10% -30% 20%;
-  height: 70%;
-  background: radial-gradient(circle, var(--tile), transparent 70%);
-  opacity: 0.35;
-  filter: blur(20px);
-}
-
-.shape-mark {
-  position: absolute;
-  inset: 0;
-  margin: auto;
-  width: 88px;
-  height: 88px;
-  background: var(--tile);
-  box-shadow: 0 18px 40px color-mix(in srgb, var(--tile) 45%, transparent);
-  animation: float-shape 5s ease-in-out infinite;
-}
-
-.shape-icosahedron {
-  clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
-}
-
-.shape-torus {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  background: transparent;
-  border: 22px solid var(--tile);
-  box-shadow: none;
-}
-
-.shape-arch {
-  width: 96px;
-  height: 110px;
-  border-radius: 96px 96px 8px 8px;
-}
-
-.shape-roundedBox {
-  border-radius: 22px;
-}
-
-.shape-cone {
-  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
-  width: 90px;
-  height: 110px;
-}
-
-.shape-vessel {
-  width: 70px;
-  height: 110px;
-  border-radius: 40% 40% 28% 28% / 18% 18% 55% 55%;
-}
-
-.shape-tool {
-  width: 28px;
-  height: 120px;
-  border-radius: 10px 10px 4px 4px;
-  box-shadow:
-    0 18px 40px color-mix(in srgb, var(--tile) 45%, transparent),
-    0 46px 0 -8px #8a9099,
-    0 78px 0 -11px #b8bec6;
-}
-
-@keyframes float-shape {
-  0%,
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
-  50% {
-    transform: translateY(-8px) rotate(4deg);
-  }
-}
-
-.tile-body {
-  display: grid;
-  gap: 0.35rem;
-  padding: 1.2rem 1.2rem 0.45rem;
-}
-
-.tile-index {
-  font-family: var(--font-display);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--ink-soft);
-}
-
-.tile-body h3 {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 1.2rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.tile-body p {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--ink-soft);
-}
-
-.tile-action {
-  margin-top: auto;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 1rem 1.2rem 1.2rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--signal);
-}
-
-/* ——— Viewer ——— */
-.viewer-section {
-  position: relative;
-  z-index: 1;
-  padding: 2.5rem 1.25rem 5rem;
-  background:
-    radial-gradient(ellipse at top, rgba(62, 207, 154, 0.08), transparent 40%),
-    linear-gradient(180deg, var(--paper) 0%, #ddd8cf 100%);
-}
-
-.viewer-shell {
-  max-width: 72rem;
-  margin: 0 auto;
-}
-
-.viewer-toolbar {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  margin-bottom: 1.35rem;
-}
-
-.viewer-switcher {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.viewer-switcher button {
-  min-width: 2.7rem;
-  height: 2.7rem;
-  border-radius: 999px;
-  border: 1px solid var(--line-strong);
-  background: rgba(255, 255, 255, 0.7);
-  font-family: var(--font-display);
-  font-size: 0.75rem;
-  font-weight: 700;
-  transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.viewer-switcher button:hover {
-  transform: translateY(-1px);
-}
-
-.viewer-switcher button.is-active {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: #fff;
-}
-
-.viewer-stage {
-  position: relative;
-  height: min(68vh, 540px);
-  border-radius: 28px;
-  overflow: hidden;
-  border: 1px solid rgba(16, 20, 28, 0.08);
-  box-shadow: 0 28px 70px rgba(24, 30, 40, 0.14);
-  background: #e8ecf1;
-}
-
-.viewer-backdrop {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 90% 70% at 50% 28%, #ffffff 0%, transparent 58%),
-    radial-gradient(ellipse 70% 45% at 50% 100%, rgba(16, 24, 40, 0.08) 0%, transparent 55%),
-    linear-gradient(180deg, #f4f6f8 0%, #e6ebf0 48%, #d5dce4 100%);
-}
-
-.viewer-backdrop::after {
-  content: '';
-  position: absolute;
-  left: 8%;
-  right: 8%;
-  bottom: 12%;
-  height: 42%;
-  border-radius: 50%;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(16, 24, 40, 0.12) 0%,
-    rgba(16, 24, 40, 0.04) 45%,
-    transparent 70%
-  );
-  filter: blur(8px);
-  pointer-events: none;
-}
-
-.viewer-frame {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-}
-
-.viewer-nav {
-  position: absolute;
-  z-index: 3;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 2.75rem;
-  height: 2.75rem;
-  border: 1px solid rgba(16, 20, 28, 0.12);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.9);
-  color: var(--ink);
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.12);
-}
-
-.viewer-nav-prev {
-  left: 1rem;
-}
-
-.viewer-nav-next {
-  right: 1rem;
-}
-
-.viewer-nav:hover {
-  transform: translateY(-50%) scale(1.05);
-}
-
-.viewer-chrome {
-  position: absolute;
-  z-index: 2;
-  left: 1.1rem;
-  right: 1.1rem;
-  bottom: 1.1rem;
-  display: flex;
-  justify-content: space-between;
-  gap: 0.75rem;
-  font-size: 0.7rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: rgba(16, 24, 40, 0.45);
-  pointer-events: none;
-}
-
-.viewer-details {
-  display: grid;
-  gap: 1.5rem;
-  margin-top: 1.35rem;
-  padding: 1.45rem;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.78);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(12px);
-  box-shadow: var(--shadow-soft);
-}
-
-.detail-main h3 {
-  margin: 0 0 0.65rem;
-  font-family: var(--font-display);
-  font-size: clamp(1.55rem, 3vw, 2.1rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-}
-
-.detail-main p:last-child {
-  margin: 0;
-  color: var(--ink-soft);
-  line-height: 1.65;
-}
-
-.specs {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.9rem 1rem;
-  margin: 0;
-}
-
-.specs div {
-  padding-top: 0.75rem;
-  border-top: 1px solid var(--line);
-}
-
-.specs dt {
-  margin-bottom: 0.2rem;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
-.specs dd {
-  margin: 0;
-  font-family: var(--font-display);
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-transform: capitalize;
-}
-
-/* ——— Upload / Admin ——— */
-.upload {
-  padding: 4rem 1.25rem;
-  background:
-    radial-gradient(ellipse at 20% 0%, rgba(255, 59, 31, 0.08), transparent 45%),
-    linear-gradient(180deg, #e7e3db 0%, var(--chalk) 100%);
-}
-
-.upload-shell {
-  max-width: 40rem;
-  margin: 0 auto;
-  padding: 1.85rem;
-  border: 1px solid var(--line);
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: var(--shadow-soft);
-  backdrop-filter: blur(12px);
-}
-
-.upload-head {
-  display: grid;
-  gap: 0.75rem;
-  margin-bottom: 1.5rem;
-}
-
-.admin-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: var(--ink-soft);
-}
-
-.admin-bar .btn {
-  padding: 0.55rem 0.95rem;
-  font-size: 0.85rem;
-}
-
-.upload-lead {
-  margin: 0.5rem 0 0;
-  color: var(--ink-soft);
-  line-height: 1.55;
-}
-
-.upload-lead code,
-.upload-steps code {
-  font-size: 0.88em;
-  padding: 0.1em 0.35em;
-  border-radius: 4px;
-  background: rgba(16, 20, 28, 0.06);
-}
-
-.upload-steps {
-  margin: 1.25rem 0 0;
-  padding-left: 1.2rem;
-  color: var(--ink-soft);
-  line-height: 1.7;
-}
-
-.upload-form {
-  display: grid;
-  gap: 1rem;
-}
-
-.upload-form label {
-  display: grid;
-  gap: 0.4rem;
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
-.upload-form input,
-.upload-form textarea {
-  width: 100%;
-  padding: 0.8rem 0.9rem;
-  border: 1px solid var(--line-strong);
-  border-radius: 12px;
-  background: #fff;
-  color: var(--ink);
-  font: inherit;
-  font-size: 0.95rem;
-  text-transform: none;
-  letter-spacing: normal;
-  font-weight: 500;
-}
-
-.upload-form input[type='color'] {
-  padding: 0.25rem;
-  height: 2.6rem;
-  cursor: pointer;
-}
-
-.upload-form input:focus,
-.upload-form textarea:focus {
-  outline: 2px solid color-mix(in srgb, var(--signal) 35%, transparent);
-  border-color: var(--signal);
-}
-
-.upload-row {
-  display: grid;
-  gap: 1rem;
-}
-
-.upload-file input[type='file'] {
-  padding: 0.65rem;
-  font-size: 0.88rem;
-}
-
-.thumb-preview {
-  width: 100%;
-  max-width: 220px;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  background: #fff;
-}
-
-.thumb-preview img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.upload-form .btn {
-  justify-self: start;
-  margin-top: 0.35rem;
-}
-
-.upload-form .btn:disabled {
-  opacity: 0.65;
-  cursor: wait;
-  transform: none;
-}
-
-.upload-message {
-  margin: 0;
-  font-size: 0.92rem;
-  font-weight: 500;
-  text-transform: none;
-  letter-spacing: normal;
-}
-
-.upload-message.is-success {
-  color: #1f6f6a;
-}
-
-.upload-message.is-error,
-.upload-message.is-idle {
-  color: var(--signal-deep);
-}
-
-.upload-message.is-uploading {
-  color: var(--ink-soft);
-}
-
-.banner-error {
-  margin: 0 1.25rem;
-  padding: 0.85rem 1rem;
-  border-radius: 12px;
-  background: #ffe8e3;
-  color: #8a2a1c;
-  font-size: 0.92rem;
-}
-
-.data-status {
-  max-width: 72rem;
-  margin: 0.75rem auto 0;
-  padding: 0 1.25rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  color: var(--ink-soft);
-}
-
-.data-refresh {
-  padding: 0.4rem 0.8rem;
-  border-radius: 999px;
-  border: 1px solid var(--line-strong);
-  background: #fff;
-  font-size: 0.78rem;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.data-refresh:hover:not(:disabled) {
-  border-color: var(--ink);
-  color: var(--ink);
-}
-
-.data-refresh:disabled {
-  opacity: 0.6;
-  cursor: wait;
-}
-
-.app-loading {
-  display: grid;
-  place-items: center;
-  min-height: 100svh;
-  color: var(--ink-soft);
-  background: var(--void);
-}
-
-.empty-collection {
-  max-width: 72rem;
-  margin: 0 auto;
-  padding: 2.5rem 1.25rem;
-  display: grid;
-  justify-items: start;
-  gap: 1rem;
-  color: var(--ink-soft);
-}
-
-.viewer-empty {
-  margin-top: 1rem;
-  padding: 2.5rem 1.5rem;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.7);
-  border: 1px solid var(--line);
-}
-
-/* ——— Experience ——— */
-.experience {
-  position: relative;
-  z-index: 1;
-  padding: 5rem 1.25rem 4.5rem;
-  background:
-    radial-gradient(ellipse at 10% 0%, rgba(62, 207, 154, 0.08), transparent 40%),
-    linear-gradient(180deg, var(--chalk) 0%, #e5e1d8 100%);
-}
-
-.experience-head {
-  align-items: start;
-}
-
-.award-chip {
-  display: grid;
-  gap: 0.25rem;
-  padding: 1.1rem 1.25rem;
-  border-radius: 18px;
-  background: var(--void);
-  color: var(--chalk);
-  box-shadow: var(--shadow-soft);
-}
-
-.award-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--mint);
-}
-
-.award-chip strong {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 700;
-}
-
-.award-chip span:last-child {
-  font-size: 0.88rem;
-  color: rgba(243, 241, 236, 0.6);
-}
-
-.experience-list {
-  max-width: 72rem;
-  margin: 0 auto;
-  display: grid;
-  gap: 1.1rem;
-}
-
-.experience-item {
-  display: grid;
-  gap: 1rem;
-  padding: 1.4rem 1.35rem;
-  border-radius: 20px;
-  background: rgba(255, 255, 255, 0.78);
-  border: 1px solid var(--line);
-  backdrop-filter: blur(8px);
-}
-
-.experience-period {
-  margin: 0 0 0.35rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--signal);
-}
-
-.experience-meta h3 {
-  margin: 0 0 0.25rem;
-  font-family: var(--font-display);
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-}
-
-.experience-company {
-  margin: 0;
-  color: var(--ink-soft);
-  font-weight: 600;
-}
-
-.experience-item ul {
-  margin: 0;
-  padding-left: 1.1rem;
-  color: var(--ink-soft);
-  line-height: 1.55;
-}
-
-.experience-item li + li {
-  margin-top: 0.45rem;
-}
-
-.about-title {
-  margin: 1rem 0 0;
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 1.15rem;
-  color: rgba(243, 241, 236, 0.7);
-}
-
-.about-award-note {
-  margin: 0 0 1.5rem !important;
-  font-size: 1.02rem !important;
-  color: rgba(243, 241, 236, 0.58) !important;
-}
-
-.skill-grid {
-  display: grid;
-  gap: 0.85rem;
-  margin-bottom: 1.75rem;
-}
-
-.skill-card {
-  padding: 1rem 1.1rem;
-  border-radius: 16px;
-  border: 1px solid rgba(243, 241, 236, 0.12);
-  background: rgba(243, 241, 236, 0.04);
-}
-
-.skill-card h4,
-.about-extra h4 {
-  margin: 0 0 0.4rem;
-  font-family: var(--font-display);
-  font-size: 0.78rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--mint);
-}
-
-.skill-card p,
-.about-extra p {
-  margin: 0;
-  font-family: var(--font-body) !important;
-  font-style: normal !important;
-  font-size: 0.95rem !important;
-  line-height: 1.5 !important;
-  color: rgba(243, 241, 236, 0.75) !important;
-}
-
-.about-extra {
-  display: grid;
-  gap: 1.25rem;
-  margin-bottom: 1.75rem;
-}
-
-.about-extra .muted {
-  margin-top: 0.25rem !important;
-  color: rgba(243, 241, 236, 0.5) !important;
-}
-
-/* ——— About ——— */
-.about {
-  position: relative;
-  z-index: 1;
-  padding: 5.5rem 1.25rem;
-  background:
-    radial-gradient(ellipse at 80% 20%, rgba(255, 59, 31, 0.16), transparent 40%),
-    linear-gradient(145deg, #10141a 0%, #0b0d10 50%, #141a22 100%);
-  color: var(--chalk);
-}
-
-.about-grid {
-  max-width: 72rem;
-  margin: 0 auto;
-  display: grid;
-  gap: 1.75rem;
-}
-
-.about .eyebrow {
-  color: #ff7a66;
-}
-
-.about-copy p {
-  margin: 0 0 1.6rem;
-  font-size: 1.18rem;
-  line-height: 1.7;
-  color: rgba(243, 241, 236, 0.72);
-  font-family: var(--font-serif);
-  font-style: italic;
-}
-
-.about-contact {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.85rem 1.5rem;
-  font-weight: 600;
-}
-
-.about-contact a {
-  color: var(--mint);
-}
-
-.about-contact a:hover {
-  color: #7aefc0;
-}
-
-.footer {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  gap: 0.5rem;
-  padding: 1.35rem 1.25rem 1.9rem;
-  background: #07090c;
-  color: rgba(243, 241, 236, 0.45);
-  font-size: 0.85rem;
-}
-
-.footer-brand {
-  font-family: var(--font-display);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: var(--chalk);
-}
-
-@media (min-width: 720px) {
-  .nav {
-    padding: 1.15rem 2rem;
+import { useEffect, useMemo, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { studio } from './data/models'
+import { useModels } from './hooks/useModels'
+import { deletePortfolioModel } from './lib/modelsApi'
+import ModelViewer from './components/ModelViewer'
+import ModelUpload from './components/ModelUpload'
+import './styles/App.css'
+
+const ease = [0.22, 1, 0.36, 1]
+
+function selectModel(id, setActiveId) {
+  setActiveId(id)
+  document.getElementById('viewer')?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  })
+}
+
+export default function App() {
+  const { models, loading, error, writable, refresh } = useModels()
+  const [activeId, setActiveId] = useState(null)
+  const [showAdmin, setShowAdmin] = useState(false)
+  const [editingModel, setEditingModel] = useState(null)
+  const [deletingId, setDeletingId] = useState(null)
+
+  useEffect(() => {
+    if (!models.length) {
+      setActiveId(null)
+      return
+    }
+    setActiveId((current) => {
+      if (current && models.some((model) => model.id === current)) return current
+      return models[0].id
+    })
+  }, [models])
+
+  function openAdmin(event) {
+    event.preventDefault()
+    setEditingModel(null)
+    setShowAdmin(true)
   }
 
-  .brand-text {
-    display: inline;
+  function openEditModel(event, model) {
+    event.preventDefault()
+    event.stopPropagation()
+    if (!writable) return
+    setEditingModel(model)
+    setShowAdmin(true)
   }
 
-  .nav-links {
-    display: flex;
+  async function handleDeleteModel(event, model) {
+    event.preventDefault()
+    event.stopPropagation()
+
+    if (!writable) return
+
+    const ok = window.confirm(
+      `Delete “${model.title}”? This removes it from the project catalog and deletes its files.`,
+    )
+    if (!ok) return
+
+    setDeletingId(model.id)
+    try {
+      await deletePortfolioModel(model)
+      const next = await refresh({ silent: true })
+      if (activeId === model.id) {
+        setActiveId(next?.[0]?.id ?? null)
+      }
+    } catch (err) {
+      console.error(err)
+      window.alert(err.message || 'Delete failed.')
+    } finally {
+      setDeletingId(null)
+    }
   }
 
-  .hero-copy {
-    padding: 8rem 2rem 5.5rem;
+  useEffect(() => {
+    if (!showAdmin) return
+    const timer = window.setTimeout(() => {
+      document.getElementById('admin')?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }, 50)
+    return () => window.clearTimeout(timer)
+  }, [showAdmin])
+
+  const active = useMemo(
+    () => models.find((m) => m.id === activeId) ?? models[0] ?? null,
+    [models, activeId],
+  )
+  const activeIndex = Math.max(
+    0,
+    models.findIndex((m) => m.id === activeId),
+  )
+
+  function showNeighbor(direction) {
+    if (models.length < 2) return
+    const next = (activeIndex + direction + models.length) % models.length
+    setActiveId(models[next].id)
   }
 
-  .hero-meta {
-    display: flex;
-    right: 2rem;
-    bottom: 2rem;
-  }
+  return (
+    <div className="app">
+      <div className="grain" aria-hidden="true" />
+      <div className="orb orb-a" aria-hidden="true" />
+      <div className="orb orb-b" aria-hidden="true" />
 
-  .scroll-cue {
-    left: 2rem;
-    bottom: 2rem;
-  }
+      <header className="nav">
+        <a className="brand" href="#top">
+          <span className="brand-mark-mini">{studio.shortName}</span>
+          <span className="brand-text">{studio.name}</span>
+        </a>
+        <nav className="nav-links">
+          <a href="#work">Work</a>
+          <a href="#viewer">Viewer</a>
+          <a href="#experience">Experience</a>
+          <a href="#about">About</a>
+          <button type="button" className="nav-link-btn" onClick={openAdmin}>
+            Admin
+          </button>
+        </nav>
+        <a className="nav-cta" href={`mailto:${studio.email}`}>
+          Let’s talk
+        </a>
+      </header>
 
-  .section-head,
-  .viewer-section,
-  .about,
-  .footer,
-  .upload {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
+      <section className="hero" id="top">
+        <div className="hero-mesh" aria-hidden="true" />
+        {models[0] && (
+          <div className="hero-stage" aria-hidden="true">
+            <ModelViewer
+              model={models[0]}
+              autoRotate
+              enableOrbit={false}
+              className="hero-viewer"
+              cameraPosition={[1.35, 0.85, 4.5]}
+            />
+          </div>
+        )}
 
-  .work {
-    padding-top: 6rem;
-  }
+        <div className="hero-copy">
+          <motion.p
+            className="brand-mark"
+            initial={{ opacity: 0, y: 32 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease }}
+          >
+            {studio.name}
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 24 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.85, delay: 0.1, ease }}
+          >
+            {studio.tagline}
+          </motion.h1>
+          <motion.p
+            className="hero-support"
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.75, delay: 0.18, ease }}
+          >
+            {studio.heroSupport}
+          </motion.p>
+          <motion.div
+            className="cta-row"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.28, ease }}
+          >
+            <a className="btn btn-primary" href="#work">
+              View work
+            </a>
+            <a className="btn btn-ghost" href="#viewer">
+              Open 3D viewer
+            </a>
+          </motion.div>
+        </div>
 
-  .section-head {
-    grid-template-columns: 1.2fr 0.8fr;
-    align-items: end;
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
+        <motion.div
+          className="hero-meta"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.55, duration: 0.8 }}
+        >
+          <span>7+ years</span>
+          <span className="dot" />
+          <span>AR · VR · XR</span>
+          <span className="dot" />
+          <span>Chennai</span>
+        </motion.div>
 
-  .work-rail {
-    grid-auto-columns: minmax(300px, 340px);
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
+        <motion.a
+          className="scroll-cue"
+          href="#work"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.9, duration: 0.8 }}
+        >
+          Scroll
+          <span />
+        </motion.a>
+      </section>
 
-  .viewer-toolbar {
-    flex-direction: row;
-    align-items: end;
-    justify-content: space-between;
-  }
+      <section className="roles" aria-label="Focus areas">
+        <div className="roles-track">
+          {[...studio.roles, ...studio.roles].map((role, i) => (
+            <span key={`${role}-${i}`}>{role}</span>
+          ))}
+        </div>
+      </section>
 
-  .viewer-stage {
-    height: 580px;
-  }
+      {error && (
+        <div className="banner-error" role="alert">
+          {error}
+        </div>
+      )}
 
-  .viewer-details {
-    grid-template-columns: 1.4fr 1fr;
-    align-items: start;
-    padding: 1.75rem 1.9rem;
-  }
+      <div className="data-status" aria-live="polite">
+        <span>
+          {`Project files · ${models.length} model${models.length === 1 ? '' : 's'}`}
+        </span>
+        <button
+          type="button"
+          className="data-refresh"
+          onClick={() => refresh()}
+          disabled={loading}
+        >
+          {loading ? 'Refreshing…' : 'Refresh'}
+        </button>
+      </div>
 
-  .about-grid {
-    grid-template-columns: 0.85fr 1.15fr;
-    gap: 3.5rem;
-    align-items: start;
-  }
+      <section className="work" id="work">
+        <div className="section-head">
+          <div>
+            <p className="eyebrow">Selected work</p>
+            <h2>
+              Models built to
+              <em> be explored</em>
+            </h2>
+          </div>
+          <p className="section-lead">
+            {models.length
+              ? 'A living collection of realtime-ready assets. Pick a piece, orbit it, and feel the surface.'
+              : 'No models saved in the project yet. Open Admin while running locally to add a .glb and thumbnail.'}
+          </p>
+        </div>
 
-  .experience {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
+        {models.length ? (
+          <div className="work-rail">
+            {models.map((model, index) => {
+              const isActive = model.id === activeId
+              return (
+                <motion.div
+                  key={model.id}
+                  className={`work-tile ${isActive ? 'is-active' : ''}`}
+                  style={{
+                    '--tile': model.color,
+                    '--tile-soft': model.accent,
+                  }}
+                  initial={{ opacity: 0, y: 36 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.6, delay: index * 0.07, ease }}
+                  whileHover={{ y: -10 }}
+                >
+                  <button
+                    type="button"
+                    className="work-tile-main"
+                    onClick={() => selectModel(model.id, setActiveId)}
+                  >
+                    <div className="tile-visual" aria-hidden="true">
+                      {model.thumbnail ? (
+                        <img
+                          className="tile-thumb"
+                          src={model.thumbnail}
+                          alt=""
+                          loading="lazy"
+                        />
+                      ) : (
+                        <>
+                          <span className={`shape-mark shape-${model.shape || 'tool'}`} />
+                          <span className="tile-glow" />
+                        </>
+                      )}
+                      <span className="tile-overlay" />
+                    </div>
+                    <div className="tile-body">
+                      <span className="tile-index">
+                        {String(index + 1).padStart(2, '0')}
+                      </span>
+                      <h3>{model.title}</h3>
+                      <p>
+                        {model.category} · {model.year}
+                      </p>
+                    </div>
+                    <span className="tile-action">
+                      Inspect
+                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                        <path
+                          d="M3 8h10M9 4l4 4-4 4"
+                          stroke="currentColor"
+                          strokeWidth="1.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  </button>
 
-  .experience-item {
-    grid-template-columns: 0.85fr 1.15fr;
-    gap: 1.75rem;
-    padding: 1.6rem 1.7rem;
-  }
+                  {writable && (
+                    <div className="tile-admin-actions">
+                      <button
+                        type="button"
+                        className="tile-edit"
+                        onClick={(event) => openEditModel(event, model)}
+                      >
+                        Edit
+                      </button>
+                      <button
+                        type="button"
+                        className="tile-delete"
+                        disabled={deletingId === model.id}
+                        onClick={(event) => handleDeleteModel(event, model)}
+                      >
+                        {deletingId === model.id ? 'Deleting…' : 'Delete'}
+                      </button>
+                    </div>
+                  )}
+                </motion.div>
+              )
+            })}
+          </div>
+        ) : (
+          <div className="empty-collection">
+            <p>Collection is empty.</p>
+            <button type="button" className="btn btn-primary" onClick={openAdmin}>
+              Upload a model
+            </button>
+          </div>
+        )}
+      </section>
 
-  .skill-grid {
-    grid-template-columns: 1fr 1fr;
-  }
+      <section className="viewer-section" id="viewer">
+        <div className="viewer-shell">
+          <div className="viewer-toolbar">
+            <div>
+              <p className="eyebrow">Interactive studio</p>
+              <h2>
+                Get closer to
+                <em> the craft</em>
+              </h2>
+            </div>
+            {models.length > 0 && (
+              <div className="viewer-switcher" role="tablist" aria-label="Models">
+                {models.map((model, index) => (
+                  <button
+                    key={model.id}
+                    type="button"
+                    role="tab"
+                    aria-selected={model.id === activeId}
+                    className={model.id === activeId ? 'is-active' : ''}
+                    onClick={() => setActiveId(model.id)}
+                    title={model.title}
+                  >
+                    {String(index + 1).padStart(2, '0')}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-  .about-extra {
-    grid-template-columns: 1fr 1fr;
-  }
+          {active ? (
+            <>
+              <div className="viewer-stage">
+                <div className="viewer-backdrop" aria-hidden="true" />
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={active.id}
+                    className="viewer-frame"
+                    initial={{ opacity: 0, scale: 0.96 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.03 }}
+                    transition={{ duration: 0.45, ease }}
+                  >
+                    <ModelViewer model={active} autoRotate enableOrbit />
+                  </motion.div>
+                </AnimatePresence>
 
-  .upload-row {
-    grid-template-columns: 1fr 1fr;
-  }
+                {models.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      className="viewer-nav viewer-nav-prev"
+                      aria-label="Previous model"
+                      onClick={() => showNeighbor(-1)}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                        <path
+                          d="M11 4L6 9l5 5"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      className="viewer-nav viewer-nav-next"
+                      aria-label="Next model"
+                      onClick={() => showNeighbor(1)}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                        <path
+                          d="M7 4l5 5-5 5"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </>
+                )}
 
-  .banner-error {
-    margin-left: 2rem;
-    margin-right: 2rem;
-  }
-}
+                <div className="viewer-chrome">
+                  <span>Drag to orbit</span>
+                  <span>
+                    {String(activeIndex + 1).padStart(2, '0')} /{' '}
+                    {String(models.length).padStart(2, '0')}
+                  </span>
+                  <span>Scroll to zoom</span>
+                </div>
+              </div>
 
-@media (min-width: 1100px) {
-  .work-rail {
-    display: grid;
-    grid-auto-flow: unset;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    overflow: visible;
-  }
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={active.id}
+                  className="viewer-details"
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.4, ease }}
+                >
+                  <div className="detail-main">
+                    <p className="eyebrow">{active.category}</p>
+                    <h3>{active.title}</h3>
+                    <p>{active.description}</p>
+                    {writable && (
+                      <div className="viewer-admin-actions">
+                        <button
+                          type="button"
+                          className="btn btn-ghost viewer-delete"
+                          onClick={(event) => openEditModel(event, active)}
+                        >
+                          Edit model
+                        </button>
+                        <button
+                          type="button"
+                          className="btn btn-ghost viewer-delete"
+                          disabled={deletingId === active.id}
+                          onClick={(event) => handleDeleteModel(event, active)}
+                        >
+                          {deletingId === active.id ? 'Deleting…' : 'Delete model'}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                  <dl className="specs">
+                    <div>
+                      <dt>Year</dt>
+                      <dd>{active.year}</dd>
+                    </div>
+                    <div>
+                      <dt>Polygons</dt>
+                      <dd>{active.polyCount}</dd>
+                    </div>
+                    <div>
+                      <dt>Pipeline</dt>
+                      <dd>{active.software}</dd>
+                    </div>
+                    <div>
+                      <dt>Surface</dt>
+                      <dd>{active.material}</dd>
+                    </div>
+                  </dl>
+                </motion.div>
+              </AnimatePresence>
+            </>
+          ) : (
+            <div className="empty-collection viewer-empty">
+              <p>No model selected. Upload one from Admin to inspect it here.</p>
+            </div>
+          )}
+        </div>
+      </section>
 
-  .work-tile {
-    min-height: 420px;
-  }
+      {showAdmin && (
+        <ModelUpload
+          writable={writable}
+          editingModel={editingModel}
+          onClearEdit={() => setEditingModel(null)}
+          onClose={() => {
+            setShowAdmin(false)
+            setEditingModel(null)
+          }}
+          onUploaded={async () => {
+            const next = await refresh({ silent: true })
+            if (editingModel) {
+              const updated = next?.find((m) => m.id === editingModel.id)
+              if (updated) setActiveId(updated.id)
+              setEditingModel(null)
+            } else if (next?.[0]?.id) {
+              setActiveId(next[0].id)
+            }
+            document.getElementById('viewer')?.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+            })
+          }}
+        />
+      )}
+
+      <section className="experience" id="experience">
+        <div className="section-head experience-head">
+          <div>
+            <p className="eyebrow">Career</p>
+            <h2>
+              Experience that
+              <em> ships</em>
+            </h2>
+          </div>
+          <div className="award-chip">
+            <span className="award-label">Award</span>
+            <strong>{studio.award.title}</strong>
+            <span>
+              {studio.award.year} · {studio.award.category}
+            </span>
+          </div>
+        </div>
+
+        <div className="experience-list">
+          {studio.experience.map((job, index) => (
+            <motion.article
+              key={job.company}
+              className="experience-item"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.55, delay: index * 0.08, ease }}
+            >
+              <div className="experience-meta">
+                <p className="experience-period">{job.period}</p>
+                <h3>{job.role}</h3>
+                <p className="experience-company">{job.company}</p>
+              </div>
+              <ul>
+                {job.points.map((point) => (
+                  <li key={point}>{point}</li>
+                ))}
+              </ul>
+            </motion.article>
+          ))}
+        </div>
+      </section>
+
+      <section className="about" id="about">
+        <div className="about-grid">
+          <div className="about-brand">
+            <p className="eyebrow">About</p>
+            <h2>
+              Built for
+              <em> clarity</em>
+            </h2>
+            <p className="about-title">{studio.title}</p>
+          </div>
+          <div className="about-copy">
+            <p>{studio.blurb}</p>
+            <p className="about-award-note">{studio.award.note}</p>
+
+            <div className="skill-grid">
+              {studio.skillGroups.map((group) => (
+                <div key={group.label} className="skill-card">
+                  <h4>{group.label}</h4>
+                  <p>{group.items}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="about-extra">
+              <div>
+                <h4>Education</h4>
+                <p>{studio.education.degree}</p>
+                <p className="muted">
+                  {studio.education.school} · {studio.education.years}
+                </p>
+              </div>
+              <div>
+                <h4>Certifications</h4>
+                <p>{studio.certifications.join(' · ')}</p>
+              </div>
+            </div>
+
+            <div className="about-contact">
+              <span>{studio.location}</span>
+              <a href={`mailto:${studio.email}`}>{studio.email}</a>
+              <a href={studio.phoneHref}>{studio.phone}</a>
+              <a href={studio.workSamples} target="_blank" rel="noreferrer">
+                Work samples
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer className="footer">
+        <span className="footer-brand">{studio.name}</span>
+        <span>Senior 3D Artist · AR / VR / XR</span>
+      </footer>
+    </div>
+  )
 }
