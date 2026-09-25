@@ -817,6 +817,35 @@ button {
   height: 100%;
 }
 
+.viewer-nav {
+  position: absolute;
+  z-index: 3;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid rgba(16, 20, 28, 0.12);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--ink);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(16, 24, 40, 0.12);
+}
+
+.viewer-nav-prev {
+  left: 1rem;
+}
+
+.viewer-nav-next {
+  right: 1rem;
+}
+
+.viewer-nav:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
 .viewer-chrome {
   position: absolute;
   z-index: 2;
