@@ -95,6 +95,12 @@ export default function App() {
     models.findIndex((m) => m.id === activeId),
   )
 
+  function showNeighbor(direction) {
+    if (models.length < 2) return
+    const next = (activeIndex + direction + models.length) % models.length
+    setActiveId(models[next].id)
+  }
+
   return (
     <div className="app">
       <div className="grain" aria-hidden="true" />
@@ -382,6 +388,43 @@ export default function App() {
                     <ModelViewer model={active} autoRotate enableOrbit />
                   </motion.div>
                 </AnimatePresence>
+
+                {models.length > 1 && (
+                  <>
+                    <button
+                      type="button"
+                      className="viewer-nav viewer-nav-prev"
+                      aria-label="Previous model"
+                      onClick={() => showNeighbor(-1)}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                        <path
+                          d="M11 4L6 9l5 5"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      type="button"
+                      className="viewer-nav viewer-nav-next"
+                      aria-label="Next model"
+                      onClick={() => showNeighbor(1)}
+                    >
+                      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" aria-hidden="true">
+                        <path
+                          d="M7 4l5 5-5 5"
+                          stroke="currentColor"
+                          strokeWidth="1.7"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </button>
+                  </>
+                )}
 
                 <div className="viewer-chrome">
                   <span>Drag to orbit</span>
